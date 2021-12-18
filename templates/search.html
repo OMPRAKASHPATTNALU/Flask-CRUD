@@ -1,0 +1,117 @@
+{% extends "home.html" %}
+
+{% block content %}
+  <br>
+  <!-- Button trigger modal -->
+  <div class="d-flex justify-content-center">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+      Add Details
+    </button>
+  </div> 
+  <br>
+
+  <!--table -->
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">S No.</th>
+        <th scope="col">Student</th>
+        <th scope="col">Subject</th>
+        <th scope="col">Marks</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in all %}
+      <tr>
+        <th scope="row">{{student.id}}</th>
+        <td>{{student.name}}</td>
+        <td>{{student.subject}}</td>
+        <td>{{student.marks}}</td>
+        <td><a class="btn btn-primary" href="/update/{{student.id}}" data-toggle="modal" role="button" data-target="#exampleModall{{student.id}}">
+          Edit 
+        </a>&nbsp<a class="btn btn-danger" href="{{ url_for('delete', sid=student.id) }}" role="button">Delete</a></td>
+      </tr>
+      
+    </tbody>
+  
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModall{{student.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabell" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabell">Edit Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('update') }}" method="POST">
+          {{ Editform.csrf_token() }}
+          <div class="form-group">
+            {{ Editform.id(class="form-control",value=student.id) }}
+        </div>
+          <div class="form-group">
+              {{ Editform.name.label }}
+              {{ Editform.name(class="form-control",value=student.name,disabled=True) }}
+          </div>
+           <div class="form-group">
+              {{ Editform.subject.label }}
+              {{ Editform.subject(class="form-control",value=student.subject,disabled=True) }}
+          </div>
+           <div class="form-group">
+              {{ Editform.mark.label }}
+              {{ Editform.mark(class="form-control",value=student.marks) }}
+          </div>
+          <div class='row justify-content-center'>
+            <div class='col-5'>
+                {{Editform.submit(class="btn btn-primary action mt-3")}}
+            </div>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+</table>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Student Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="POST">
+            {{ form.csrf_token() }}
+            <div class="form-group">
+                {{ form.name.label }}
+                {{ form.name(class="form-control") }}
+            </div>
+             <div class="form-group">
+                {{ form.subject.label }}
+                {{ form.subject(class="form-control") }}
+            </div>
+             <div class="form-group">
+                {{ form.mark.label }}
+                {{ form.mark(class="form-control") }}
+            </div>
+            <div class='row justify-content-center'>
+              <div class='col-5'>
+                  {{form.submit(class="btn btn-primary action mt-3")}}
+              </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div> 
+
+  
+{% endblock %}
